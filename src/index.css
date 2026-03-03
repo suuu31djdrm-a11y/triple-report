@@ -2,7 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Noto Sans JP を全体のフォントに */
+/* ステータスバー（電池・時計）まわりも白背景に */
+html,
+body {
+  background-color: #fff;
+}
 body {
   font-family: 'Noto Sans JP', sans-serif;
 }

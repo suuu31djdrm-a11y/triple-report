@@ -86,44 +86,46 @@ export function ApprovalFlowCard({ steps, onViewFlow, className = '' }: Approval
               )}
             </div>
 
-            {/* 右：アバター・名前・日付（アイコン付き）・タグ */}
-            <div className="flex-1 min-w-0 flex items-center gap-2 flex-wrap">
+            {/* 右：アバター・名前 | 日付・バッジ（右寄せ） */}
+            <div className="flex-1 min-w-0 flex items-center gap-2">
               <span className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-200 text-xs font-medium text-gray-600 shrink-0">
                 {step.initial}
               </span>
-              <span className={`font-medium shrink-0 ${step.status === 'pending' ? 'text-gray-400' : 'text-gray-900'}`}>
+              <span className={`font-medium shrink-0 min-w-0 truncate ${step.status === 'pending' ? 'text-gray-400' : 'text-gray-900'}`}>
                 {step.name}
               </span>
-              {step.date && (
-                <span className="inline-flex items-center gap-1.5 text-xs text-gray-600 shrink-0 flex-nowrap">
-                  <span className="flex h-4 w-4 shrink-0 items-center justify-center">
-                    {step.date === '3/12' && <FileCheckIcon className="h-4 w-4 text-gray-600" />}
-                    {step.date === '3/19' && <CalendarCheckIcon className="h-4 w-4 text-gray-600" />}
+              <div className="ml-auto flex items-center gap-2 shrink-0 flex-nowrap">
+                {step.date && (
+                  <span className="inline-flex items-center gap-1.5 text-xs text-gray-600">
+                    <span className="flex h-4 w-4 shrink-0 items-center justify-center">
+                      {step.date === '3/12' && <FileCheckIcon className="h-4 w-4 text-gray-600" />}
+                      {step.date === '3/19' && <CalendarCheckIcon className="h-4 w-4 text-gray-600" />}
+                    </span>
+                    <span>{step.date}</span>
                   </span>
-                  <span>{step.date}</span>
-                </span>
-              )}
-              {step.tag && (
-                <span
-                  className={`inline-flex items-center gap-1 text-xs px-2 py-0.5 rounded shrink-0 ${
-                    step.tag === 'QSCチェック済'
-                      ? 'border border-gray-300 bg-white text-gray-700'
-                      : 'bg-gray-100 text-gray-600'
-                  }`}
-                >
-                  {step.tag === 'QSCチェック済' && (
-                    <svg className="h-4 w-4 shrink-0 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}>
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-                    </svg>
-                  )}
-                  {step.tag}
-                </span>
-              )}
-              {step.status === 'pending' && i === steps.length - 1 && (
-                <span className="text-xs px-2 py-0.5 rounded bg-gray-100 text-gray-600 shrink-0">
-                  承認要
-                </span>
-              )}
+                )}
+                {step.tag && (
+                  <span
+                    className={`inline-flex items-center gap-1 text-xs px-2 py-0.5 rounded ${
+                      step.tag === 'QSCチェック済'
+                        ? 'border border-gray-300 bg-white text-gray-700'
+                        : 'bg-gray-100 text-gray-600'
+                    }`}
+                  >
+                    {step.tag === 'QSCチェック済' && (
+                      <svg className="h-4 w-4 shrink-0 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                      </svg>
+                    )}
+                    {step.tag}
+                  </span>
+                )}
+                {step.status === 'pending' && i === steps.length - 1 && (
+                  <span className="text-xs px-2 py-0.5 rounded bg-gray-100 text-gray-600">
+                    承認要
+                  </span>
+                )}
+              </div>
             </div>
           </div>
         ))}
