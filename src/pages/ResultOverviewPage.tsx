@@ -60,7 +60,7 @@ export default function ResultOverviewPage() {
             reportLabel="月次レポート"
             reportAge="1日前"
             assigneeName="田中良子"
-            deadline="2026/3/24"
+            deadline="3/19"
             progressCurrent={8}
             progressTotal={12}
             variant="titleOnly"
@@ -84,7 +84,7 @@ export default function ResultOverviewPage() {
           reportLabel="月次レポート"
           reportAge="1日前"
           assigneeName="田中良子"
-          deadline="2026/3/24"
+          deadline="3/19"
           progressCurrent={8}
           progressTotal={12}
         />
