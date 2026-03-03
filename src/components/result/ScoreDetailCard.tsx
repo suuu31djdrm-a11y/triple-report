@@ -40,7 +40,7 @@ export function ScoreDetailCard({
           <div className="shrink-0 w-8 h-8 flex items-center justify-center text-primary">
             <DocumentCheckIcon className="w-full h-full" />
           </div>
-          <h2 className="font-medium text-gray-900">総合スコア</h2>
+          <h2 className="font-bold text-gray-900">総合スコア</h2>
         </span>
         <ChevronRightIcon className="h-5 w-5 text-gray-400 shrink-0" />
       </button>
@@ -49,11 +49,11 @@ export function ScoreDetailCard({
         <span className="text-gray-900">/{maxScore}</span>
         <span className="text-gray-900"> ({pct}%)</span>
       </p>
-      <p className="text-sm text-gray-500 mt-1">前回:{prevLabel}</p>
+      <p className="text-sm text-gray-500 mt-1 pt-1 border-t border-gray-200">前回:{prevLabel}</p>
       <div className="mt-4 grid grid-cols-2 gap-3">
         {CATEGORIES.map((cat) => (
           <div key={cat.name} className="rounded-lg p-3" style={{ background: 'var(--black-50, #F9F9FC)' }}>
-            <p className="text-sm font-medium text-gray-900">{cat.name}</p>
+            <p className="text-sm font-bold text-gray-900">{cat.name}</p>
             <p className="mt-1">
               <span
                 className={
@@ -64,7 +64,7 @@ export function ScoreDetailCard({
               </span>
               /120 ({cat.pct}%)
             </p>
-            <p className="text-xs text-gray-500 mt-0.5">前回: {cat.prev}</p>
+            <p className="text-xs text-gray-500 mt-0.5 pt-0.5 border-t border-gray-200">前回: {cat.prev}</p>
           </div>
         ))}
       </div>

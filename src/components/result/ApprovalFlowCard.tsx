@@ -32,7 +32,7 @@ export function ApprovalFlowCard({ steps, onViewFlow, className = '' }: Approval
           <span className="flex items-center justify-center w-8 h-8 text-primary shrink-0">
             <ApprovalHistoryIcon className="w-full h-full" />
           </span>
-          <span className="font-medium text-gray-900">承認フロー</span>
+          <span className="font-bold text-gray-900">承認フロー</span>
         </span>
         <ChevronRightIcon className="h-5 w-5 text-gray-400 shrink-0" />
       </button>
@@ -95,20 +95,27 @@ export function ApprovalFlowCard({ steps, onViewFlow, className = '' }: Approval
                 {step.name}
               </span>
               {step.date && (
-                <span className="flex items-center gap-1 text-xs text-gray-500 shrink-0">
-                  {step.date === '3/12' && <FileCheckIcon className="h-4 w-4 shrink-0 text-gray-500" />}
-                  {step.date === '3/19' && <CalendarCheckIcon className="h-4 w-4 shrink-0 text-gray-500" />}
+                <span className="inline-flex items-center gap-1.5 text-xs text-gray-600 shrink-0 flex-nowrap">
+                  <span className="flex h-4 w-4 shrink-0 items-center justify-center">
+                    {step.date === '3/12' && <FileCheckIcon className="h-4 w-4 text-gray-600" />}
+                    {step.date === '3/19' && <CalendarCheckIcon className="h-4 w-4 text-gray-600" />}
+                  </span>
                   <span>{step.date}</span>
                 </span>
               )}
               {step.tag && (
                 <span
-                  className={`text-xs px-2 py-0.5 rounded shrink-0 ${
+                  className={`inline-flex items-center gap-1 text-xs px-2 py-0.5 rounded shrink-0 ${
                     step.tag === 'QSCチェック済'
                       ? 'border border-gray-300 bg-white text-gray-700'
                       : 'bg-gray-100 text-gray-600'
                   }`}
                 >
+                  {step.tag === 'QSCチェック済' && (
+                    <svg className="h-4 w-4 shrink-0 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                    </svg>
+                  )}
                   {step.tag}
                 </span>
               )}

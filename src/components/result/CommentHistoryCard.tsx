@@ -20,7 +20,7 @@ export function CommentHistoryCard({ latestComment, onViewHistory, className = '
           <span className="shrink-0 w-8 h-8 flex items-center justify-center text-primary">
             <ChatHistoryIcon className="w-full h-full" />
           </span>
-          <span className="font-medium text-gray-900">コメント履歴</span>
+          <span className="font-bold text-gray-900">コメント履歴</span>
         </span>
         <ChevronRightIcon className="h-5 w-5 text-gray-400 shrink-0" />
       </button>
