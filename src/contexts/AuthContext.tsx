@@ -16,10 +16,20 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setUser(session?.user ?? null)
+    if (!supabase) {
       setLoading(false)
-    })
+      return
+    }
+    supabase.auth
+      .getSession()
+      .then(({ data: { session } }) => {
+        setUser(session?.user ?? null)
+        setLoading(false)
+      })
+      .catch(() => {
+        setUser(null)
+        setLoading(false)
+      })
 
     const {
       data: { subscription },
@@ -31,12 +41,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [])
 
   const signIn = async (email: string, password: string) => {
+    if (!supabase) return { error: new Error('Supabase が設定されていません') }
     const { error } = await supabase.auth.signInWithPassword({ email, password })
     return { error: error as Error | null }
   }
 
   const signOut = async () => {
-    await supabase.auth.signOut()
+    if (supabase) await supabase.auth.signOut()
   }
 
   return (
