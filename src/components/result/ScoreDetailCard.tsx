@@ -1,3 +1,4 @@
+import { ChevronRightIcon } from '@/components/icons'
 import { DocumentCheckIcon } from './DocumentCheckIcon'
 
 /** 業務の100点は赤、満点(100%)は青、それ以外は赤 */
@@ -14,6 +15,7 @@ export interface ScoreDetailCardProps {
   totalScore: number
   maxScore: number
   prevLabel: string
+  onViewScore?: () => void
   className?: string
 }
 
@@ -22,18 +24,26 @@ export function ScoreDetailCard({
   totalScore,
   maxScore,
   prevLabel,
+  onViewScore,
   className = '',
 }: ScoreDetailCardProps) {
   const pct = maxScore > 0 ? Math.round((totalScore / maxScore) * 100) : 0
 
   return (
     <section className={`rounded-xl bg-white p-4 shadow-card ${className}`}>
-      <div className="flex items-center gap-2 mb-3">
-        <div className="shrink-0 w-8 h-8 flex items-center justify-center text-primary">
-          <DocumentCheckIcon className="w-full h-full" />
-        </div>
-        <h2 className="font-medium text-gray-900">総合スコア</h2>
-      </div>
+      <button
+        type="button"
+        onClick={onViewScore}
+        className="flex w-full items-center justify-between gap-2 text-left mb-3"
+      >
+        <span className="flex items-center gap-2">
+          <div className="shrink-0 w-8 h-8 flex items-center justify-center text-primary">
+            <DocumentCheckIcon className="w-full h-full" />
+          </div>
+          <h2 className="font-medium text-gray-900">総合スコア</h2>
+        </span>
+        <ChevronRightIcon className="h-5 w-5 text-gray-400 shrink-0" />
+      </button>
       <p className="text-2xl font-bold">
         <span className="text-score-low">{totalScore}</span>
         <span className="text-gray-900">/{maxScore}</span>
