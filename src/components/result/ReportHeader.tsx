@@ -65,7 +65,7 @@ export function ReportHeader({
       {!titleOnly && (
       <div className="border-b border-gray-200 px-4 py-3 flex flex-col gap-2 relative">
         <div className="absolute left-0 right-0 bottom-0 h-px bg-transparent pointer-events-none shadow-bottom-only" aria-hidden />
-        <div className="flex items-center justify-between gap-4">
+        <div className="flex items-center justify-start gap-4">
           <span className="flex items-center gap-1 text-sm font-medium text-gray-900">
             <UserIcon className="h-4 w-4 text-gray-900 shrink-0" />
             {assigneeName}
