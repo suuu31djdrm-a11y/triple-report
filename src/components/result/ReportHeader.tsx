@@ -37,12 +37,14 @@ export function ReportHeader({
       {/* Titlebar: 戻る（16px空けて）| 左寄せ「店の結果」+ 月次・1日前 */}
       {storeName != null && (
         <div
-          className={`flex items-center gap-4 px-4 py-2 ${titleOnly ? 'border-b border-gray-200 shadow-card' : 'py-3'}`}
+          className={`grid grid-cols-[1fr_auto_1fr] items-center gap-4 px-4 py-2 ${titleOnly ? 'border-b border-gray-200 shadow-card' : 'py-3'}`}
         >
-          <button type="button" className="p-2 -ml-1 text-gray-700 rounded-full hover:bg-gray-100 shrink-0" aria-label="戻る">
-            <BackIcon className="h-6 w-6" />
-          </button>
-          <div className="flex-1 flex flex-col items-center justify-center min-w-0">
+          <div className="flex justify-start">
+            <button type="button" className="p-2 -ml-1 text-gray-700 rounded-full hover:bg-gray-100" aria-label="戻る">
+              <BackIcon className="h-6 w-6" />
+            </button>
+          </div>
+          <div className="flex flex-col items-center justify-center min-w-0">
             <h1 className="text-base font-bold text-gray-900 truncate w-full text-center">{storeName}の結果</h1>
             <div className="flex items-center gap-2 mt-0.5">
               <span className="flex items-center gap-1 text-sm text-gray-600">
@@ -55,6 +57,7 @@ export function ReportHeader({
               </span>
             </div>
           </div>
+          <div className="flex justify-end" aria-hidden />
         </div>
       )}
 
