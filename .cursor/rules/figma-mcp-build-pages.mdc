@@ -1,0 +1,39 @@
+---
+description: Build pages from Figma using Figma MCP tools (get_design_context, get_metadata, get_screenshot)
+globs: src/pages/**/*.tsx, src/components/**/*.tsx
+alwaysApply: false
+---
+
+# Building Pages from Figma MCP
+
+When the user asks to build a page from Figma (or to implement a Figma design/frame):
+
+## 1. Get design context
+
+- **Desktop MCP**: User can say "generate my Figma selection" after selecting a frame in Figma; use the Figma MCP server tool `get_design_context` for the current selection.
+- **Remote MCP**: Use `get_design_context` with a **Figma file URL and node ID** (e.g. `https://www.figma.com/design/FILE_KEY?node-id=123-456`). Ask the user for the frame URL if they haven’t provided it.
+
+## 2. Optional: use metadata first for large designs
+
+For very large frames, call `get_metadata` first to get a sparse XML outline (layer IDs, names, types, position, size), then call `get_design_context` only for the nodes you need.
+
+## 3. Output stack
+
+- Generate **React + Tailwind** by default (Figma MCP’s default).
+- To use project components: prompt or instruct to "use components from `src/components`" (or set up Code Connect and use `get_code_connect_map` / `clientFrameworks`).
+
+## 4. Where to put generated code
+
+- **New page**: Create `src/pages/PageName.tsx` and add a route in `src/App.tsx` (path and lazy import).
+- **Reusable UI**: Put shared pieces in `src/components/` and import them from the page.
+
+## 5. Design system (optional)
+
+- Run `create_design_system_rules` and save the result under `.cursor/rules/` so the agent uses your design tokens and patterns when generating code.
+
+## 6. Code Connect (optional)
+
+- Use `get_code_connect_map` to align Figma components to existing components in the codebase.
+- Use `add_code_connect_map` to record new Figma node → code component mappings for better reuse.
+
+Keep generated components in this repo’s structure: `@/` alias points to `src/`.
