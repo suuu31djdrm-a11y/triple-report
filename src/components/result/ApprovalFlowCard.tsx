@@ -86,12 +86,12 @@ export function ApprovalFlowCard({ steps, onViewFlow, className = '' }: Approval
               )}
             </div>
 
-            {/* 右：アバター・名前 | 日付・バッジ（右寄せ） */}
-            <div className="flex-1 min-w-0 flex items-center gap-2">
+            {/* 右：アバター・名前 | 余裕がなければ次行に日付・バッジ（16px padding キープ） */}
+            <div className="flex-1 min-w-0 flex flex-wrap items-center gap-x-2 gap-y-1">
               <span className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-200 text-xs font-medium text-gray-600 shrink-0">
                 {step.initial}
               </span>
-              <span className={`font-medium shrink-0 min-w-0 truncate ${step.status === 'pending' ? 'text-gray-400' : 'text-gray-900'}`}>
+              <span className={`font-medium min-w-0 truncate ${step.status === 'pending' ? 'text-gray-400' : 'text-gray-900'}`}>
                 {step.name}
               </span>
               <div className="ml-auto flex items-center gap-2 shrink-0 flex-nowrap">
