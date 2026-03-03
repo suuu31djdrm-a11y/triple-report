@@ -23,7 +23,7 @@ export function BottomActionBar({
 }: BottomActionBarProps) {
   return (
     <div
-      className={`fixed bottom-0 left-0 right-0 flex w-full border-t border-gray-200 bg-white shadow-top-subtle transition-transform duration-300 ease-out ${className}`}
+      className={`fixed bottom-0 left-0 right-0 z-30 flex w-full border-t border-gray-200 bg-white shadow-top-subtle transition-transform duration-300 ease-out ${className}`}
       style={{
         transform: visible ? 'translateY(0)' : 'translateY(100%)',
       }}
