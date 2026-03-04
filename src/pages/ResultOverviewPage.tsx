@@ -1,6 +1,4 @@
 import { useEffect, useRef, useState } from 'react'
-import { MenuIcon } from '@/components/icons'
-import logoSvg from '@/assets/triplereport-logo.svg'
 import {
   ReportHeader,
   ScoreDetailCard,
@@ -9,7 +7,7 @@ import {
 } from '@/components/result'
 
 const APPROVAL_STEPS = [
-  { name: '木下浩之', date: '3/12', tag: 'QSCチェック完了', initial: '木', status: 'completed' as const },
+  { name: '木下浩之', date: '3/12', time: '15:23', tag: 'QSCチェック完了', initial: '木', status: 'completed' as const },
   { name: '田中良子', date: '3/19', tag: '要結果確認・報告', initial: '田', status: 'current' as const },
   { name: '木下浩之', initial: '木', status: 'pending' as const },
 ]
@@ -67,17 +65,8 @@ export default function ResultOverviewPage() {
         </div>
       )}
 
-      {/* 通常時: トップバー＋タイトルバー＋ゲージ（スクロールで隠れる・stickyにしない） */}
+      {/* 通常時: タイトルバー＋ゲージ（上詰め・スクロールで隠れる） */}
       <div>
-        <header className="bg-white px-4 py-2">
-          <div className="flex items-center justify-between">
-            <img src={logoSvg} alt="TRIPLE REPORT" className="h-5 w-auto" />
-            <button type="button" className="p-2 text-gray-900 hover:bg-gray-100 rounded-lg" aria-label="メニュー">
-              <MenuIcon className="h-6 w-6" />
-            </button>
-          </div>
-        </header>
-
         <ReportHeader
           storeName="銀座店"
           reportLabel="月次レポート"
