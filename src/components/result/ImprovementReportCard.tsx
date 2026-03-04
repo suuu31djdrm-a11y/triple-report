@@ -1,4 +1,4 @@
-import { CalendarIcon, ChevronRightIcon } from '@/components/icons'
+import { CalendarIcon } from '@/components/icons'
 
 export interface ImprovementReportCardProps {
   count: number
@@ -25,10 +25,9 @@ export function ImprovementReportCard({ count, deadline, onConfirm, className = 
         <button
           type="button"
           onClick={onConfirm}
-          className="flex w-full items-center justify-center gap-2 rounded-lg bg-primary py-3 text-white font-medium"
+          className="flex w-full items-center justify-center rounded-lg bg-primary py-3 text-white font-medium"
         >
           確認
-          <ChevronRightIcon className="h-5 w-5" />
         </button>
       </div>
     </section>

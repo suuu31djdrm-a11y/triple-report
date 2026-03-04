@@ -1,4 +1,4 @@
-import { ChevronRightIcon } from '@/components/icons'
+import { Fragment } from 'react'
 import { FileCheckIcon } from '@/components/icons'
 import { CalendarCheckIcon } from '@/components/icons'
 import { ApprovalHistoryIcon } from './ApprovalHistoryIcon'
@@ -15,27 +15,28 @@ export interface ApprovalStep {
 
 export interface ApprovalFlowCardProps {
   steps: ApprovalStep[]
+  /** 対応履歴内に表示する総括コメント（1件目と2件目の間に表示） */
+  summaryComment?: string
   onViewFlow?: () => void
   className?: string
 }
 
-/** Figma: 承認フロー（縦タイムライン：完了・現在・承認要） */
-export function ApprovalFlowCard({ steps, onViewFlow, className = '' }: ApprovalFlowCardProps) {
+/** 対応履歴（縦タイムライン：完了・現在・承認要 + 総括コメント） */
+export function ApprovalFlowCard({ steps, summaryComment, onViewFlow, className = '' }: ApprovalFlowCardProps) {
   return (
     <section className={`rounded-xl bg-white p-4 shadow-card border border-gray-100 ${className}`}>
-      <button
-        type="button"
+      <div
+        role={onViewFlow ? 'button' : undefined}
+        tabIndex={onViewFlow ? 0 : undefined}
         onClick={onViewFlow}
-        className="flex w-full items-center justify-between gap-2 text-left"
+        onKeyDown={onViewFlow ? (e) => e.key === 'Enter' && onViewFlow() : undefined}
+        className="flex w-full items-center gap-2 text-left"
       >
-        <span className="flex items-center gap-2">
-          <span className="flex items-center justify-center w-8 h-8 text-primary shrink-0">
-            <ApprovalHistoryIcon className="w-full h-full" />
-          </span>
-          <span className="font-bold text-gray-900">承認フロー</span>
+        <span className="flex items-center justify-center w-8 h-8 text-primary shrink-0">
+          <ApprovalHistoryIcon className="w-full h-full" />
         </span>
-        <ChevronRightIcon className="h-5 w-5 text-gray-400 shrink-0" />
-      </button>
+        <span className="font-bold text-gray-900">対応履歴</span>
+      </div>
 
       <div className="mt-4 relative">
         {/* 縦線：全体グレー、完了〜現在は青で上書き */}
@@ -47,10 +48,15 @@ export function ApprovalFlowCard({ steps, onViewFlow, className = '' }: Approval
           const lastActiveIndex = steps.findIndex((s) => s.status === 'current')
           const activeCount =
             lastActiveIndex >= 0 ? lastActiveIndex + 1 : steps.filter((s) => s.status === 'completed').length
+          const commentBlockHeight = summaryComment ? 72 : 0
           if (activeCount > 0) {
             const rowHeight = 48
             const lineTop = 24
-            const lastActiveCenter = lineTop + lastActiveIndex * rowHeight + rowHeight / 2
+            const lastActiveCenter =
+              lineTop +
+              lastActiveIndex * rowHeight +
+              (lastActiveIndex >= 1 ? commentBlockHeight : 0) +
+              rowHeight / 2
             return (
               <div
                 className="absolute left-3 top-6 w-0.5 -translate-x-px bg-primary"
@@ -62,9 +68,18 @@ export function ApprovalFlowCard({ steps, onViewFlow, className = '' }: Approval
           return null
         })()}
 
-        {/* 1行 = 左に丸、右に名前・日付・タグ（綺麗にそろう） */}
+        {/* 1行 = 左に丸、右に名前・日付・タグ。2件目の前に総括コメントを表示 */}
         {steps.map((step, i) => (
-          <div key={i} className="relative z-10 flex items-center gap-3 pb-6 last:pb-0 min-h-12">
+          <Fragment key={i}>
+            {i === 1 && summaryComment ? (
+              <div className="relative z-10 flex items-start gap-3 pb-4 pl-9">
+                <div className="flex-1 min-w-0 rounded-lg bg-gray-50 border border-gray-100 p-3">
+                  <p className="text-xs font-medium text-gray-500 mb-1">総括コメント</p>
+                  <p className="text-sm text-gray-800 whitespace-pre-wrap">{summaryComment}</p>
+                </div>
+              </div>
+            ) : null}
+            <div className="relative z-10 flex items-center gap-3 pb-6 last:pb-0 min-h-12">
             {/* 左：円（チェック or ●） */}
             <div className="w-6 shrink-0 flex justify-center">
               {step.status === 'completed' && (
@@ -107,12 +122,12 @@ export function ApprovalFlowCard({ steps, onViewFlow, className = '' }: Approval
                 {step.tag && (
                   <span
                     className={`inline-flex items-center gap-1 text-xs px-2 py-0.5 rounded ${
-                      step.tag === 'QSCチェック済'
+                      step.tag === 'QSCチェック完了'
                         ? 'border border-gray-300 bg-white text-gray-700'
                         : 'bg-gray-100 text-gray-600'
                     }`}
                   >
-                    {step.tag === 'QSCチェック済' && (
+                    {step.tag === 'QSCチェック完了' && (
                       <svg className="h-4 w-4 shrink-0 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}>
                         <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                       </svg>
@@ -128,6 +143,7 @@ export function ApprovalFlowCard({ steps, onViewFlow, className = '' }: Approval
               </div>
             </div>
           </div>
+          </Fragment>
         ))}
       </div>
     </section>

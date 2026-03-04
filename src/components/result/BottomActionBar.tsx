@@ -1,4 +1,3 @@
-import { ChevronRightIcon } from '@/components/icons'
 import { DocumentListIcon } from '@/components/icons'
 import { CircleAlertIcon } from '@/components/icons'
 
@@ -38,7 +37,6 @@ export function BottomActionBar({
           <p className="text-sm font-medium text-gray-700">全項目を確認</p>
           <p className="text-[14px] font-bold text-gray-900 mt-0.5">{allItemsCount}件</p>
         </div>
-        <ChevronRightIcon className="h-5 w-5 text-gray-900 shrink-0" />
       </button>
       <button
         type="button"
@@ -50,7 +48,6 @@ export function BottomActionBar({
           <p className="text-sm font-medium text-white/90">要報告を確認</p>
           <p className="text-[14px] font-bold text-white mt-0.5">{reportItemsCount}件</p>
         </div>
-        <ChevronRightIcon className="h-5 w-5 text-white shrink-0" />
       </button>
     </div>
   )

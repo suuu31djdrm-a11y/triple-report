@@ -5,12 +5,11 @@ import {
   ReportHeader,
   ScoreDetailCard,
   ApprovalFlowCard,
-  CommentHistoryCard,
   BottomActionBar,
 } from '@/components/result'
 
 const APPROVAL_STEPS = [
-  { name: '木下浩之', date: '3/12', tag: 'QSCチェック済', initial: '木', status: 'completed' as const },
+  { name: '木下浩之', date: '3/12', tag: 'QSCチェック完了', initial: '木', status: 'completed' as const },
   { name: '田中良子', date: '3/19', tag: '要結果確認・報告', initial: '田', status: 'current' as const },
   { name: '木下浩之', initial: '木', status: 'pending' as const },
 ]
@@ -98,17 +97,17 @@ export default function ResultOverviewPage() {
           prevLabel="80/120 (66%)"
         />
 
-        {/* 承認フロー: 縦タイムライン 3ステップ */}
-        <ApprovalFlowCard steps={APPROVAL_STEPS} />
-
-        {/* コメント履歴 */}
-        <CommentHistoryCard latestComment={null} />
+        {/* 対応履歴: 縦タイムライン + 総括コメント */}
+        <ApprovalFlowCard
+          steps={APPROVAL_STEPS}
+          summaryComment="サービスやクオリティの項目で改善が必要です。確認お願いします。"
+        />
       </main>
 
-      {/* Bottom: 全項目を確認 121件 | 要報告を確認 4件 */}
+      {/* Bottom: 全項目を確認 121件 | 要報告を確認 12件 */}
       <BottomActionBar
         allItemsCount={121}
-        reportItemsCount={4}
+        reportItemsCount={12}
         visible={bottomBarVisible}
       />
     </div>
