@@ -1,13 +1,15 @@
 import { DocumentCheckIcon } from './DocumentCheckIcon'
 
-/** 業務の100点は赤、満点(100%)は青、それ以外は赤 */
+/** 満点(100%)は青、それ以外は赤 */
 const CATEGORIES = [
-  { name: '業務', current: 100, max: 120, pct: 83, prev: '100/120, (83%)', highlight: 'low' as const },
-  { name: 'クレンリネス', current: 80, max: 120, pct: 83, prev: '100/120, (83%)', highlight: 'low' as const },
+  { name: 'クレンリネス', current: 100, max: 120, pct: 83, prev: '100/120, (83%)', highlight: 'low' as const },
   { name: 'クオリティ', current: 60, max: 120, pct: 50, prev: '100/120, (83%)', highlight: 'low' as const },
   { name: 'サービス', current: 60, max: 120, pct: 50, prev: '100/120, (83%)', highlight: 'low' as const },
-  { name: 'ブランド', current: 120, max: 120, pct: 100, prev: '100/120, (83%)', highlight: 'high' as const },
-  { name: 'チームワーク', current: 120, max: 120, pct: 100, prev: '100/120, (83%)', highlight: 'high' as const },
+  { name: 'アトモスフィア', current: 120, max: 120, pct: 100, prev: '100/120, (83%)', highlight: 'high' as const },
+  { name: '店舗リスト', current: 80, max: 120, pct: 67, prev: '100/120, (83%)', highlight: 'low' as const },
+  { name: 'オペレーション', current: 100, max: 120, pct: 83, prev: '100/120, (83%)', highlight: 'low' as const },
+  { name: '設備道具関係', current: 120, max: 120, pct: 100, prev: '100/120, (83%)', highlight: 'high' as const },
+  { name: 'ジェネライズム', current: 120, max: 120, pct: 100, prev: '100/120, (83%)', highlight: 'high' as const },
 ] as const
 
 export interface ScoreDetailCardProps {
@@ -18,7 +20,7 @@ export interface ScoreDetailCardProps {
   className?: string
 }
 
-/** Figma: 総合スコア（書類+チェックアイコン、100を赤で強調、前回、3x2カテゴリグリッド） */
+/** Figma: 総合スコア（書類+チェックアイコン、前回、2x4カテゴリグリッド） */
 export function ScoreDetailCard({
   totalScore,
   maxScore,

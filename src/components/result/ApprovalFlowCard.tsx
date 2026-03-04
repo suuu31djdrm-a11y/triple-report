@@ -1,6 +1,7 @@
 import { Fragment } from 'react'
 import { FileCheckIcon } from '@/components/icons'
 import { CalendarCheckIcon } from '@/components/icons'
+import { UserIcon } from '@/components/icons'
 import { ApprovalHistoryIcon } from './ApprovalHistoryIcon'
 
 export type ApprovalStepStatus = 'completed' | 'current' | 'pending'
@@ -95,52 +96,47 @@ export function ApprovalFlowCard({ steps, summaryComment, onViewFlow, className 
                 </span>
               )}
               {step.status === 'pending' && (
-                <span className="flex h-5 w-5 items-center justify-center rounded-full bg-gray-200 shadow-sm">
-                  <span className="h-1.5 w-1.5 rounded-full bg-white" />
-                </span>
+                <span className="flex h-5 w-5 items-center justify-center rounded-full border-2 border-gray-300 bg-white shadow-sm" aria-hidden />
               )}
             </div>
 
-            {/* 右：アバター・名前 | 余裕がなければ次行に日付・バッジ（16px padding キープ） */}
+            {/* 右：Figma順 = タグ → 人物アイコン+名前 → 日付アイコン+日付 */}
             <div className="flex-1 min-w-0 flex flex-wrap items-center gap-x-2 gap-y-1">
-              <span className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-200 text-xs font-medium text-gray-600 shrink-0">
-                {step.initial}
+              {/* 1. タグラベル（QSCチェック完了 / 要結果確認・報告 / 承認要） */}
+              {step.tag ? (
+                <span
+                  className={`inline-flex items-center gap-1 text-xs px-2 py-0.5 rounded shrink-0 ${
+                    step.tag === 'QSCチェック完了'
+                      ? 'border border-gray-300 bg-white text-gray-700'
+                      : 'bg-gray-100 text-gray-600'
+                  }`}
+                >
+                  {step.tag === 'QSCチェック完了' && (
+                    <svg className="h-4 w-4 shrink-0 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                    </svg>
+                  )}
+                  {step.tag}
+                </span>
+              ) : null}
+              {step.status === 'pending' && i === steps.length - 1 && !step.tag ? (
+                <span className="text-xs px-2 py-0.5 rounded bg-gray-100 text-gray-600 shrink-0">承認要</span>
+              ) : null}
+              {/* 2. 人物アイコン + 名前 */}
+              <span className="inline-flex items-center gap-1.5 shrink-0">
+                <UserIcon className="h-4 w-4 text-gray-700 shrink-0" />
+                <span className={`text-sm font-medium ${step.status === 'pending' ? 'text-gray-400' : 'text-gray-900'}`}>
+                  {step.name}
+                </span>
               </span>
-              <span className={`font-medium min-w-0 truncate ${step.status === 'pending' ? 'text-gray-400' : 'text-gray-900'}`}>
-                {step.name}
-              </span>
-              <div className="ml-auto flex items-center gap-2 shrink-0 flex-nowrap">
-                {step.date && (
-                  <span className="inline-flex items-center gap-1.5 text-xs text-gray-600">
-                    <span className="flex h-4 w-4 shrink-0 items-center justify-center">
-                      {step.date === '3/12' && <FileCheckIcon className="h-4 w-4 text-gray-600" />}
-                      {step.date === '3/19' && <CalendarCheckIcon className="h-4 w-4 text-gray-600" />}
-                    </span>
-                    <span>{step.date}</span>
-                  </span>
-                )}
-                {step.tag && (
-                  <span
-                    className={`inline-flex items-center gap-1 text-xs px-2 py-0.5 rounded ${
-                      step.tag === 'QSCチェック完了'
-                        ? 'border border-gray-300 bg-white text-gray-700'
-                        : 'bg-gray-100 text-gray-600'
-                    }`}
-                  >
-                    {step.tag === 'QSCチェック完了' && (
-                      <svg className="h-4 w-4 shrink-0 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}>
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-                      </svg>
-                    )}
-                    {step.tag}
-                  </span>
-                )}
-                {step.status === 'pending' && i === steps.length - 1 && (
-                  <span className="text-xs px-2 py-0.5 rounded bg-gray-100 text-gray-600">
-                    承認要
-                  </span>
-                )}
-              </div>
+              {/* 3. 書類/カレンダーアイコン + 日付 */}
+              {step.date ? (
+                <span className="inline-flex items-center gap-1.5 text-xs text-gray-600 shrink-0 ml-auto">
+                  {step.date === '3/12' && <FileCheckIcon className="h-4 w-4 shrink-0" />}
+                  {step.date === '3/19' && <CalendarCheckIcon className="h-4 w-4 shrink-0" />}
+                  <span>{step.date}</span>
+                </span>
+              ) : null}
             </div>
           </div>
           </Fragment>
