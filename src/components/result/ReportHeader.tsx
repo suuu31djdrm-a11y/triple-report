@@ -70,10 +70,10 @@ export function ReportHeader({
             <UserIcon className="h-4 w-4 text-gray-900 shrink-0" />
             {assigneeName}
           </span>
-          <span className="flex items-center gap-1 text-sm text-gray-900">
+          <span className="flex items-center gap-1 text-sm font-medium text-gray-900">
             <CalendarCheckIcon className="h-4 w-4 shrink-0 text-gray-900" aria-hidden />
-            <span className="font-normal">報告期限</span>
-            <span className="font-medium">{deadline}</span>
+            報告期限
+            <span>{deadline}</span>
           </span>
         </div>
         <div className="flex items-center gap-2">
