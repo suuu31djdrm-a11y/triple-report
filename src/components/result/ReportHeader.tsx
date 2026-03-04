@@ -8,6 +8,8 @@ export interface ReportHeaderProps {
   storeName?: string
   reportLabel?: string
   reportAge?: string
+  /** 担当者名の左に表示するタグ（例: 要結果確認・報告） */
+  assigneeTag?: string
   assigneeName: string
   deadline: string
   progressCurrent: number
@@ -22,6 +24,7 @@ export function ReportHeader({
   storeName,
   reportLabel = '月次レポート',
   reportAge = '1日前',
+  assigneeTag,
   assigneeName,
   deadline,
   progressCurrent,
@@ -65,7 +68,12 @@ export function ReportHeader({
       {!titleOnly && (
       <div className="border-b border-gray-200 px-4 py-3 flex flex-col gap-2 relative">
         <div className="absolute left-0 right-0 bottom-0 h-px bg-transparent pointer-events-none shadow-bottom-only" aria-hidden />
-        <div className="flex items-center justify-start gap-4">
+        <div className="flex items-center justify-start gap-4 flex-wrap">
+          {assigneeTag != null && assigneeTag !== '' && (
+            <span className="rounded-md bg-gray-100 px-2.5 py-1 text-xs font-medium text-gray-700">
+              {assigneeTag}
+            </span>
+          )}
           <span className="flex items-center gap-1 text-sm font-medium text-gray-900">
             <UserIcon className="h-4 w-4 text-gray-900 shrink-0" />
             {assigneeName}

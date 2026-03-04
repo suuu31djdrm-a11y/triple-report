@@ -56,6 +56,7 @@ export default function ResultOverviewPage() {
             storeName="銀座店"
             reportLabel="月次レポート"
             reportAge="1日前"
+            assigneeTag="要 結果確認・報告"
             assigneeName="田中良子"
             deadline="3/19"
             progressCurrent={8}
@@ -71,6 +72,7 @@ export default function ResultOverviewPage() {
           storeName="銀座店"
           reportLabel="月次レポート"
           reportAge="1日前"
+          assigneeTag="要 結果確認・報告"
           assigneeName="田中良子"
           deadline="3/19"
           progressCurrent={8}

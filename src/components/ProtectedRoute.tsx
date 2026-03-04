@@ -1,9 +1,16 @@
 import { Navigate, useLocation } from 'react-router-dom'
 import { useAuth } from '@/contexts/AuthContext'
 
+/** ローカル（開発）では認証をスキップして全ルートにアクセス可能にする */
+const isLocalDev = import.meta.env.DEV
+
 export function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { user, loading } = useAuth()
   const location = useLocation()
+
+  if (isLocalDev) {
+    return <>{children}</>
+  }
 
   if (loading) {
     return (

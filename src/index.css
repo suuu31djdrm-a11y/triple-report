@@ -16,6 +16,11 @@ body {
   --color-primary: #14228A;
   --color-primary-light: #C5CAED;
   --black-50: #F9F9FC;
+  /* ホーム・ステータスバッジ用（Figma） */
+  --report-green: #17AB4B;
+  --report-red: #E5484D;
+  --report-orange: #F17300;
+  --report-light-blue: #39A0ED;
 }
 
 /* 確実に #14228A を適用（Tailwind の primary を上書き） */

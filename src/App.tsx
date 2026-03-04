@@ -4,6 +4,8 @@ import { ProtectedRoute } from '@/components/ProtectedRoute'
 import { useAuth } from '@/contexts/AuthContext'
 
 const HomePage = lazy(() => import('@/pages/HomePage'))
+const StoresPage = lazy(() => import('@/pages/StoresPage'))
+const AddStoresPaymentPage = lazy(() => import('@/pages/AddStoresPaymentPage'))
 const ResultOverviewPage = lazy(() => import('@/pages/ResultOverviewPage'))
 const LoginPage = lazy(() => import('@/pages/LoginPage'))
 
@@ -19,6 +21,22 @@ function App() {
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/login" element={<LoginRedirect />} />
+        <Route
+          path="/stores"
+          element={
+            <ProtectedRoute>
+              <StoresPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/stores/add"
+          element={
+            <ProtectedRoute>
+              <AddStoresPaymentPage />
+            </ProtectedRoute>
+          }
+        />
         <Route
           path="/result/:storeId?"
           element={
