@@ -8,6 +8,8 @@ export type ApprovalStepStatus = 'completed' | 'current' | 'pending'
 export interface ApprovalStep {
   name: string
   date?: string
+  /** 完了済みのときの時刻（例: 15:23） */
+  time?: string
   tag?: string
   initial: string
   status: ApprovalStepStatus
@@ -95,17 +97,12 @@ export function ApprovalFlowCard({ steps, summaryComment, onViewFlow, className 
               {/* 1. ラベル（12px） */}
               {step.tag ? (
                 <span
-                  className={`inline-flex items-center gap-1 w-fit text-[12px] px-2 py-0.5 rounded ${
+                  className={`inline-flex items-center w-fit text-[12px] px-2 py-0.5 rounded ${
                     step.tag === 'QSCチェック完了'
                       ? 'border border-gray-300 bg-white text-gray-700'
                       : 'bg-gray-100 text-gray-600'
                   }`}
                 >
-                  {step.tag === 'QSCチェック完了' && (
-                    <svg className="h-3.5 w-3.5 shrink-0 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}>
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-                    </svg>
-                  )}
                   {step.tag}
                 </span>
               ) : null}
@@ -125,7 +122,7 @@ export function ApprovalFlowCard({ steps, summaryComment, onViewFlow, className 
                   <span className="inline-flex items-center gap-1 text-gray-600">
                     {step.date === '3/12' && <FileCheckIcon className="h-3.5 w-3.5 shrink-0" />}
                     {step.date === '3/19' && <CalendarCheckIcon className="h-3.5 w-3.5 shrink-0" />}
-                    <span>{step.date}</span>
+                    <span>{step.date}{step.time ? ` ${step.time}` : ''}</span>
                   </span>
                 ) : null}
               </span>
