@@ -1,4 +1,3 @@
-import { Fragment } from 'react'
 import { FileCheckIcon } from '@/components/icons'
 import { CalendarCheckIcon } from '@/components/icons'
 import { UserIcon } from '@/components/icons'
@@ -49,15 +48,15 @@ export function ApprovalFlowCard({ steps, summaryComment, onViewFlow, className 
           const lastActiveIndex = steps.findIndex((s) => s.status === 'current')
           const activeCount =
             lastActiveIndex >= 0 ? lastActiveIndex + 1 : steps.filter((s) => s.status === 'completed').length
-          const commentBlockHeight = summaryComment ? 72 : 0
+          const commentBlockHeight = summaryComment ? 64 : 0
           if (activeCount > 0) {
-            const rowHeight = 48
+            const blockHeight = 52
             const lineTop = 24
             const lastActiveCenter =
               lineTop +
-              lastActiveIndex * rowHeight +
+              lastActiveIndex * blockHeight +
               (lastActiveIndex >= 1 ? commentBlockHeight : 0) +
-              rowHeight / 2
+              blockHeight / 2
             return (
               <div
                 className="absolute left-3 top-6 w-0.5 -translate-x-px bg-primary"
@@ -69,20 +68,11 @@ export function ApprovalFlowCard({ steps, summaryComment, onViewFlow, className 
           return null
         })()}
 
-        {/* 1行 = 左に丸、右に名前・日付・タグ。2件目の前に総括コメントを表示 */}
+        {/* 各ステップ = 左に丸、右に [ラベル12px] → [名前・日付12px] → [総括コメント(1件目のみ・あれば)] */}
         {steps.map((step, i) => (
-          <Fragment key={i}>
-            {i === 1 && summaryComment ? (
-              <div className="relative z-10 flex items-start gap-3 pb-4 pl-9">
-                <div className="flex-1 min-w-0 rounded-lg bg-gray-50 border border-gray-100 p-3">
-                  <p className="text-xs font-medium text-gray-500 mb-1">総括コメント</p>
-                  <p className="text-sm text-gray-800 whitespace-pre-wrap">{summaryComment}</p>
-                </div>
-              </div>
-            ) : null}
-            <div className="relative z-10 flex items-center gap-3 pb-6 last:pb-0 min-h-12">
-            {/* 左：円（チェック or ●） */}
-            <div className="w-6 shrink-0 flex justify-center">
+          <div key={i} className="relative z-10 flex gap-3 pb-6 last:pb-0">
+            {/* 左：円（チェック or ● or 枠のみ） */}
+            <div className="w-6 shrink-0 flex justify-center pt-0.5">
               {step.status === 'completed' && (
                 <span className="flex h-5 w-5 items-center justify-center rounded-full bg-primary text-white shadow-sm">
                   <svg className="h-3 w-3 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round">
@@ -100,19 +90,19 @@ export function ApprovalFlowCard({ steps, summaryComment, onViewFlow, className 
               )}
             </div>
 
-            {/* 右：Figma順 = タグ → 人物アイコン+名前 → 日付アイコン+日付 */}
-            <div className="flex-1 min-w-0 flex flex-wrap items-center gap-x-2 gap-y-1">
-              {/* 1. タグラベル（QSCチェック完了 / 要結果確認・報告 / 承認要） */}
+            {/* 右：縦3段 = ラベル(12px) → 名前・日付(12px) → 総括コメント(1件目かつあるときのみ) */}
+            <div className="flex-1 min-w-0 flex flex-col gap-1">
+              {/* 1. ラベル（12px） */}
               {step.tag ? (
                 <span
-                  className={`inline-flex items-center gap-1 text-xs px-2 py-0.5 rounded shrink-0 ${
+                  className={`inline-flex items-center gap-1 w-fit text-[12px] px-2 py-0.5 rounded ${
                     step.tag === 'QSCチェック完了'
                       ? 'border border-gray-300 bg-white text-gray-700'
                       : 'bg-gray-100 text-gray-600'
                   }`}
                 >
                   {step.tag === 'QSCチェック完了' && (
-                    <svg className="h-4 w-4 shrink-0 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}>
+                    <svg className="h-3.5 w-3.5 shrink-0 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}>
                       <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                     </svg>
                   )}
@@ -120,26 +110,35 @@ export function ApprovalFlowCard({ steps, summaryComment, onViewFlow, className 
                 </span>
               ) : null}
               {step.status === 'pending' && i === steps.length - 1 && !step.tag ? (
-                <span className="text-xs px-2 py-0.5 rounded bg-gray-100 text-gray-600 shrink-0">承認要</span>
+                <span className="text-[12px] px-2 py-0.5 rounded bg-gray-100 text-gray-600 w-fit">承認要</span>
               ) : null}
-              {/* 2. 人物アイコン + 名前 */}
-              <span className="inline-flex items-center gap-1.5 shrink-0">
-                <UserIcon className="h-4 w-4 text-gray-700 shrink-0" />
-                <span className={`text-sm font-medium ${step.status === 'pending' ? 'text-gray-400' : 'text-gray-900'}`}>
-                  {step.name}
+
+              {/* 2. 名前・日付（12px） */}
+              <span className="text-[12px] flex items-center gap-2 flex-wrap">
+                <span className="inline-flex items-center gap-1">
+                  <UserIcon className="h-3.5 w-3.5 text-gray-600 shrink-0" />
+                  <span className={step.status === 'pending' ? 'text-gray-400' : 'text-gray-800'}>
+                    {step.name}
+                  </span>
                 </span>
+                {step.date ? (
+                  <span className="inline-flex items-center gap-1 text-gray-600">
+                    {step.date === '3/12' && <FileCheckIcon className="h-3.5 w-3.5 shrink-0" />}
+                    {step.date === '3/19' && <CalendarCheckIcon className="h-3.5 w-3.5 shrink-0" />}
+                    <span>{step.date}</span>
+                  </span>
+                ) : null}
               </span>
-              {/* 3. 書類/カレンダーアイコン + 日付 */}
-              {step.date ? (
-                <span className="inline-flex items-center gap-1.5 text-xs text-gray-600 shrink-0 ml-auto">
-                  {step.date === '3/12' && <FileCheckIcon className="h-4 w-4 shrink-0" />}
-                  {step.date === '3/19' && <CalendarCheckIcon className="h-4 w-4 shrink-0" />}
-                  <span>{step.date}</span>
-                </span>
+
+              {/* 3. 総括コメント（1件目のときのみ・あるときだけ表示） */}
+              {i === 0 && summaryComment ? (
+                <div className="rounded-lg bg-gray-50 border border-gray-100 p-2.5 mt-1">
+                  <p className="text-[12px] font-medium text-gray-500 mb-1">総括コメント</p>
+                  <p className="text-[12px] text-gray-800 whitespace-pre-wrap">{summaryComment}</p>
+                </div>
               ) : null}
             </div>
           </div>
-          </Fragment>
         ))}
       </div>
     </section>
