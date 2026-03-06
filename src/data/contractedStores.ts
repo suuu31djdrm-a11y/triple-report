@@ -33,3 +33,27 @@ export function getExistingMonthlyTotal(stores: ContractedStore[]): number {
     .filter((s) => s.status === '契約中')
     .reduce((sum, s) => sum + s.monthlyAmount, 0)
 }
+
+/** 契約店舗一覧テーブル用（店舗名・登録日・状態・月額） */
+export interface StoreTableRow {
+  id: string
+  name: string
+  registrationDate: string
+  status: StoreStatus
+  monthlyAmount: number
+}
+
+/** 契約店舗ページ用モック（5店舗・9,000円/月・税込表示用） */
+export const MOCK_STORES_TABLE: StoreTableRow[] = [
+  { id: 'shinjuku', name: '新宿店', registrationDate: '2026/2/21', status: '契約中', monthlyAmount: 9000 },
+  { id: 'shibuya', name: '渋谷店', registrationDate: '2026/2/21', status: '契約中', monthlyAmount: 9000 },
+  { id: 'yokohama', name: '横浜店', registrationDate: '2026/2/21', status: '契約中', monthlyAmount: 9000 },
+  { id: 'akabane', name: '赤羽店', registrationDate: '2026/2/21', status: '契約中', monthlyAmount: 9000 },
+  { id: 'kichijoji', name: '吉祥寺店', registrationDate: '2026/2/21', status: '契約中', monthlyAmount: 9000 },
+]
+
+/** 店舗追加ページで表示する「既存の月額合計」（5店舗×9,000円＝45,000円） */
+export const EXISTING_MONTHLY_FOR_ADD_PAGE = 45000
+
+/** 新規追加1店舗あたり月額（税込表示用） */
+export const MONTHLY_PER_STORE_TAX_IN = 9000

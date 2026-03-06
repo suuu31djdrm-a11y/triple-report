@@ -80,7 +80,7 @@ export default function ResultOverviewPage() {
         />
       </div>
 
-      <main className="mx-auto max-w-lg px-4 py-4 space-y-4">
+      <main className="mx-auto max-w-lg md:max-w-4xl lg:max-w-5xl px-4 py-4 space-y-4">
         {/* 総合スコア: 100/120 (100を赤)、前回、3x2カテゴリ */}
         <ScoreDetailCard
           totalScore={100}

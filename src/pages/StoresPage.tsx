@@ -1,11 +1,9 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { HomeSidebar } from '@/components/home/HomeSidebar'
-import { SimplePageHeader } from '@/components/home/SimplePageHeader'
-import { HomeBottomNav } from '@/components/home/HomeBottomNav'
-import { MOCK_CONTRACTED_STORES, getExistingMonthlyTotal, type ContractedStore, type StoreStatus } from '@/data/contractedStores'
+import { HomeSidebar, MobileTopBar, HomeBottomNav } from '@/components/home'
+import { MOCK_STORES_TABLE, type StoreTableRow, type StoreStatus } from '@/data/contractedStores'
 
-export type { ContractedStore, StoreStatus }
+export type { StoreTableRow, StoreStatus } from '@/data/contractedStores'
 
 function PlusIcon({ className }: { className?: string }) {
   return (
@@ -15,10 +13,18 @@ function PlusIcon({ className }: { className?: string }) {
   )
 }
 
-function PhoneIcon({ className }: { className?: string }) {
+function ChevronLeftIcon({ className }: { className?: string }) {
   return (
     <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+    </svg>
+  )
+}
+
+function ChevronRightIcon({ className }: { className?: string }) {
+  return (
+    <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
     </svg>
   )
 }
@@ -29,75 +35,91 @@ const statusLabel: Record<StoreStatus, string> = {
   '解約済': '解約済',
 }
 
-export default function StoresPage() {
-  const [stores] = useState<ContractedStore[]>(MOCK_CONTRACTED_STORES)
+const PAGE_SIZE_OPTIONS = [10, 20, 50]
+const DEFAULT_PAGE_SIZE = 10
 
-  const totalAmount = getExistingMonthlyTotal(stores)
+export default function StoresPage() {
+  const [stores] = useState<StoreTableRow[]>(MOCK_STORES_TABLE)
+  const [page, setPage] = useState(1)
+  const [pageSize, setPageSize] = useState(DEFAULT_PAGE_SIZE)
+
+  const totalAmount = stores.reduce((sum, s) => sum + s.monthlyAmount, 0)
+  const totalPages = Math.max(1, Math.ceil(stores.length / pageSize))
+  const start = (page - 1) * pageSize
+  const pageStores = stores.slice(start, start + pageSize)
+  const canPrev = page > 1
+  const canNext = page < totalPages
 
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div className="min-h-screen bg-[#f9f9fc]">
       <div className="hidden md:block">
         <HomeSidebar />
       </div>
 
-      <div className="md:ml-56 min-h-screen flex flex-col pb-20 md:pb-0">
-        <SimplePageHeader />
-
-        <main className="flex-1 p-4 md:p-6">
-          <div className="mx-auto max-w-6xl">
-            <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-              <h1 className="text-xl font-bold text-gray-900 md:text-2xl">契約店舗</h1>
-              <Link
-                to="/stores/add"
-                className="inline-flex items-center justify-center gap-2 rounded-xl bg-primary px-4 py-2.5 text-sm font-bold text-white shadow-sm hover:bg-primary/90"
-              >
-                <PlusIcon className="h-5 w-5" />
-                店舗追加
-              </Link>
+      <div className="md:ml-64 min-h-screen flex flex-col pb-20 md:pb-0">
+        {/* モバイル: ロゴ + 店舗ボタン + ハンバーガー */}
+        <header className="sticky top-0 z-10 border-b border-[#dcdcde] bg-white md:hidden">
+          <MobileTopBar storeCount={stores.length} />
+        </header>
+        <main className="flex-1 px-4 py-4 md:py-6 md:px-[120px]">
+          <div className="mx-auto max-w-5xl">
+            {/* タイトル・説明 */}
+            <div className="mb-6 flex flex-col gap-2">
+              <h1 className="text-2xl font-bold text-gray-900">契約店舗</h1>
+              <p className="text-sm text-[#5c5c5f]">
+                契約店舗の確認や、新店舗を追加することができます。契約店舗数に関するお問い合わせは、弊社のカスタマーサービスまでお問い合わせください。
+              </p>
             </div>
 
-            <section className="rounded-xl border border-gray-200 bg-white shadow-sm overflow-hidden">
+            {/* 契約店舗数カード: 背景 #E8EAF8、アイコン丸はモバイル32px・デスクトップ64px（#3C51C1） */}
+            <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-stretch">
+              <div className="flex flex-1 items-center gap-4 md:gap-6 rounded-lg bg-[#E8EAF8] p-4 md:p-6 shadow-[4px_2px_8px_0px_rgba(0,0,0,0.1)]">
+                <div className="flex items-center gap-3 md:gap-4">
+                  <div className="h-8 w-8 md:h-16 md:w-16 shrink-0 rounded-full bg-[#3C51C1]" aria-hidden />
+                  <div>
+                    <p className="text-sm text-gray-900">契約店舗数</p>
+                    <p className="flex items-baseline gap-1 mt-0.5">
+                      <span className="text-2xl font-bold tabular-nums text-gray-900">{stores.length}</span>
+                      <span className="text-base text-gray-900">店舗</span>
+                    </p>
+                  </div>
+                </div>
+                <div className="flex-1 flex items-center justify-end">
+                  <Link
+                    to="/stores/add"
+                    className="inline-flex min-w-[64px] items-center justify-center gap-1 rounded-full bg-primary px-8 py-3 text-sm font-bold text-white shadow-sm hover:bg-primary/90"
+                  >
+                    <PlusIcon className="h-5 w-5" />
+                    新しい店舗を登録
+                  </Link>
+                </div>
+              </div>
+            </div>
+
+            {/* テーブル: 店舗名・登録日・状態・月額 */}
+            <section className="overflow-hidden rounded-lg border border-[#ebebed] bg-white">
               <div className="overflow-x-auto">
-                <table className="w-full min-w-[720px]">
+                <table className="w-full min-w-[280px] md:min-w-[400px]">
                   <thead>
-                    <tr className="border-b border-gray-200 bg-gray-50">
-                      <th className="px-4 py-3 text-left text-xs font-bold uppercase tracking-wider text-gray-500">店舗名</th>
-                      <th className="px-4 py-3 text-left text-xs font-bold uppercase tracking-wider text-gray-500">プラン</th>
-                      <th className="px-4 py-3 text-left text-xs font-bold uppercase tracking-wider text-gray-500">契約開始日</th>
-                      <th className="px-4 py-3 text-left text-xs font-bold uppercase tracking-wider text-gray-500">ステータス</th>
-                      <th className="px-4 py-3 text-left text-xs font-bold uppercase tracking-wider text-gray-500">担当者</th>
-                      <th className="px-4 py-3 text-left text-xs font-bold uppercase tracking-wider text-gray-500">電話番号</th>
-                      <th className="px-4 py-3 text-left text-xs font-bold uppercase tracking-wider text-gray-500">住所</th>
-                      <th className="px-4 py-3 text-right text-xs font-bold uppercase tracking-wider text-gray-500">月額（税抜）</th>
+                    <tr className="border-b border-[#ebebed]">
+                      <th className="h-12 px-4 text-left text-sm font-medium text-[#5c5c5f]">店舗名</th>
+                      <th className="h-12 px-4 text-left text-sm font-medium text-[#5c5c5f]">登録日</th>
+                      <th className="h-12 px-4 text-left text-sm font-medium text-[#5c5c5f] hidden md:table-cell">状態</th>
+                      <th className="h-12 px-4 text-right text-sm font-medium text-[#5c5c5f]">月額</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {stores.map((store) => (
-                      <tr
-                        key={store.id}
-                        className="border-b border-gray-100 last:border-0 hover:bg-gray-50/50"
-                      >
-                        <td className="px-4 py-3 text-sm font-medium text-gray-900">{store.name}</td>
-                        <td className="px-4 py-3 text-sm text-gray-700">{store.plan}</td>
-                        <td className="px-4 py-3 text-sm tabular-nums text-gray-700">{store.contractStartDate}</td>
-                        <td className="px-4 py-3">
-                          <span
-                            className={`inline-flex rounded-full px-2.5 py-0.5 text-xs font-medium ${
-                              store.status === '契約中'
-                                ? 'bg-green-100 text-green-800'
-                                : store.status === '解約予定'
-                                  ? 'bg-amber-100 text-amber-800'
-                                  : 'bg-gray-100 text-gray-600'
-                            }`}
-                          >
+                    {pageStores.map((store) => (
+                      <tr key={store.id} className="border-b border-[#ebebed] last:border-0">
+                        <td className="h-[52px] px-4 text-sm font-medium text-gray-900">{store.name}</td>
+                        <td className="h-[52px] px-4 text-sm font-medium text-gray-900 tabular-nums">{store.registrationDate}</td>
+                        <td className="h-[52px] px-4 hidden md:table-cell">
+                          <span className="inline-flex items-center rounded border border-gray-200 bg-white px-3 py-1 text-xs font-bold text-gray-900">
                             {statusLabel[store.status]}
                           </span>
                         </td>
-                        <td className="px-4 py-3 text-sm text-gray-700">{store.personInCharge}</td>
-                        <td className="px-4 py-3 text-sm tabular-nums text-gray-700">{store.phone}</td>
-                        <td className="max-w-[180px] truncate px-4 py-3 text-sm text-gray-600" title={store.address}>{store.address}</td>
-                        <td className="px-4 py-3 text-right text-sm tabular-nums text-gray-700">
-                          {store.status === '契約中' ? `¥${store.monthlyAmount.toLocaleString()}` : '—'}
+                        <td className="h-[52px] px-4 text-right text-sm font-medium tabular-nums text-gray-900">
+                          {store.monthlyAmount.toLocaleString()}円
                         </td>
                       </tr>
                     ))}
@@ -105,23 +127,63 @@ export default function StoresPage() {
                 </table>
               </div>
 
-              <div className="flex items-center justify-between border-t-2 border-gray-200 bg-gray-50 px-4 py-4">
-                <span className="text-sm font-bold text-gray-700">合計金額（月額・税抜）</span>
-                <span className="text-lg font-bold tabular-nums text-gray-900">
-                  ¥{totalAmount.toLocaleString()}
-                </span>
+              {/* 月額合計（税込） */}
+              <div className="flex items-center border-t border-[#ebebed] bg-white">
+                <div className="h-[52px] flex-1 px-4 flex items-center">
+                  <span className="text-base font-bold text-gray-900">月額合計（税込）</span>
+                </div>
+                <div className="h-[52px] flex-1 px-4 flex items-center justify-end">
+                  <span className="text-base font-bold tabular-nums text-gray-900">
+                    {totalAmount.toLocaleString()}円/月
+                  </span>
+                </div>
+              </div>
+
+              {/* ページネーション */}
+              <div className="flex flex-wrap items-center justify-between gap-4 border-t border-[#ebebed] bg-white px-4 py-3">
+                <div className="flex items-center gap-1">
+                  <button
+                    type="button"
+                    onClick={() => setPage((p) => Math.max(1, p - 1))}
+                    disabled={!canPrev}
+                    className="inline-flex h-10 items-center gap-1 rounded-full px-4 py-2 text-sm font-bold text-gray-900 disabled:opacity-50"
+                  >
+                    <ChevronLeftIcon className="h-4 w-4" />
+                    前へ
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setPage(1)}
+                    className={`inline-flex h-10 w-10 items-center justify-center rounded-full border text-sm font-medium ${
+                      page === 1 ? 'border-[#e9e9e9] bg-white text-gray-900' : 'border-transparent'
+                    }`}
+                  >
+                    1
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+                    disabled={!canNext}
+                    className="inline-flex h-10 items-center gap-1 rounded-full px-4 py-2 text-sm font-bold text-gray-900 disabled:opacity-50"
+                  >
+                    次へ
+                    <ChevronRightIcon className="h-4 w-4" />
+                  </button>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="text-sm font-bold text-gray-900">{page}/{totalPages}ページ</span>
+                  <select
+                    value={pageSize}
+                    onChange={(e) => { setPageSize(Number(e.target.value)); setPage(1) }}
+                    className="h-10 w-[200px] rounded-md border border-gray-300 bg-white pl-3 pr-8 py-2 text-sm text-gray-900"
+                  >
+                    {PAGE_SIZE_OPTIONS.map((n) => (
+                      <option key={n} value={n}>{n}件の表示</option>
+                    ))}
+                  </select>
+                </div>
               </div>
             </section>
-
-            <div className="mt-6 flex gap-3 rounded-xl border border-amber-200 bg-amber-50 p-4">
-              <PhoneIcon className="h-5 w-5 shrink-0 text-amber-600" />
-              <div>
-                <p className="text-sm font-medium text-amber-900">店舗解約について</p>
-                <p className="mt-0.5 text-sm text-amber-800">
-                  店舗の解約はお電話にてお受けしております。ご希望の場合はサポート窓口までご連絡ください。
-                </p>
-              </div>
-            </div>
           </div>
         </main>
       </div>

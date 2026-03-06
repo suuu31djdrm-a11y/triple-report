@@ -1,6 +1,7 @@
 export { HomeSidebar } from './HomeSidebar'
-export { HomeHeader } from './HomeHeader'
+export { HomeHeader, MobileTopBar } from './HomeHeader'
 export { SimplePageHeader } from './SimplePageHeader'
+export { CoachMarkStore } from './CoachMarkStore'
 export { HomeBottomNav } from './HomeBottomNav'
 export { StoreStatusCard } from './StoreStatusCard'
 export { StatusTag } from './StatusTag'

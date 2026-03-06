@@ -18,6 +18,17 @@ const variantStyles: Record<StatusTagVariant, string> = {
   '未定': 'bg-gray-300 text-gray-900',
 }
 
+/** プログレスバー等でタグと色を揃えるための fill 色（CSS変数またはTailwind色） */
+export const variantProgressColor: Record<StatusTagVariant, string> = {
+  '要結果確認・報告': 'var(--report-green)',
+  '報告の承認要': 'var(--report-light-blue)',
+  '完了': 'var(--color-primary)',
+  '再提出要': 'var(--report-light-blue)',
+  'QSCチェック中': 'var(--report-orange)',
+  'QSCチェック要': 'var(--report-orange)',
+  '未定': '#d1d5db',
+}
+
 export function StatusTag({
   variant,
   className = '',

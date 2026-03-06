@@ -5,6 +5,7 @@ import {
   HomeHeader,
   HomeBottomNav,
   StoreStatusCard,
+  CoachMarkStore,
   type StoreStatusCardData,
   type StatusTagVariant,
 } from '@/components/home'
@@ -170,7 +171,7 @@ export default function HomePage() {
       </div>
 
       {/* メインエリア: デスクトップは ml-sidebar、モバイルはフル幅 */}
-      <div className="md:ml-56 min-h-screen flex flex-col pb-20 md:pb-0">
+      <div className="md:ml-64 min-h-screen flex flex-col pb-20 md:pb-0">
         <HomeHeader />
 
         <main className="flex-1 p-4 md:p-6">
@@ -201,6 +202,9 @@ export default function HomePage() {
 
       {/* Mobile: 固定ボトムナビ */}
       <HomeBottomNav />
+
+      {/* コーチマーク: ホームアクセス時に1回表示（店舗契約ページの案内） */}
+      <CoachMarkStore />
 
       {/* ログアウト（右上・デスクトップ時） */}
       {user && (

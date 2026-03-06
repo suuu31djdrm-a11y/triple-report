@@ -1,22 +1,10 @@
 import { useState } from 'react'
-import { MenuIcon } from '@/components/icons'
+import { Link } from 'react-router-dom'
+import { MenuIcon, StoreIcon } from '@/components/icons'
 import logoSvg from '@/assets/triplereport-logo.svg'
 
-function HelpIcon({ className }: { className?: string }) {
-  return (
-    <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-    </svg>
-  )
-}
-
-function BellIcon({ className }: { className?: string }) {
-  return (
-    <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
-    </svg>
-  )
-}
+/** モバイル用の店舗数表示（参照画像に合わせて5、実際はサイドバーと合わせて12など可） */
+const MOBILE_STORE_COUNT = 5
 
 function SearchIcon({ className }: { className?: string }) {
   return (
@@ -26,78 +14,121 @@ function SearchIcon({ className }: { className?: string }) {
   )
 }
 
+function ChevronDownIcon({ className }: { className?: string }) {
+  return (
+    <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+    </svg>
+  )
+}
+
+function FilterXIcon({ className }: { className?: string }) {
+  return (
+    <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
+    </svg>
+  )
+}
+
+function ChevronRightIcon({ className }: { className?: string }) {
+  return (
+    <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+    </svg>
+  )
+}
+
+/** モバイル共通トップバー: ロゴ + 店舗ボタン(○店舗>) + ハンバーガー（コーチマークのターゲット用） */
+export function MobileTopBar({ storeCount = MOBILE_STORE_COUNT }: { storeCount?: number }) {
+  return (
+    <div className="flex items-center justify-between px-4 py-3 md:hidden">
+      <img src={logoSvg} alt="TRIPLE REPORT" className="h-5 w-auto" />
+      <Link
+        to="/stores"
+        className="coach-mark-store-target inline-flex items-center gap-2 rounded-[999px] border border-primary bg-white pl-2 pr-3 py-1 text-sm font-bold text-primary hover:bg-primary/5"
+      >
+        <StoreIcon className="h-5 w-5 shrink-0 text-primary" />
+        <span>{storeCount}店舗</span>
+        <ChevronRightIcon className="h-5 w-5 shrink-0" />
+      </Link>
+      <button type="button" className="p-2 text-gray-700 hover:bg-gray-100 rounded-lg" aria-label="メニュー">
+        <MenuIcon className="h-6 w-6" />
+      </button>
+    </div>
+  )
+}
+
 export function HomeHeader() {
   const [keyword, setKeyword] = useState('')
 
   return (
-    <header className="sticky top-0 z-10 border-b border-gray-200 bg-white">
-      {/* Mobile: logo + hamburger */}
-      <div className="flex items-center justify-between px-4 py-3 md:hidden">
-        <img src={logoSvg} alt="TRIPLE REPORT" className="h-5 w-auto" />
-        <button type="button" className="p-2 text-gray-700 hover:bg-gray-100 rounded-lg" aria-label="メニュー">
-          <MenuIcon className="h-6 w-6" />
-        </button>
-      </div>
-      {/* Mobile: チェック項目 + dropdowns + search */}
-      <div className="flex flex-wrap items-center gap-2 px-4 pb-3 md:hidden">
-        <button type="button" className="relative rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm font-medium text-gray-700">
-          チェック項目
-          <span className="absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-white">
-            12
-          </span>
-        </button>
-        <select className="rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-gray-700">
-          <option>広報</option>
-        </select>
-        <select className="rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-gray-700">
-          <option>ステータス</option>
-        </select>
-        <button type="button" className="ml-auto p-2 text-gray-600 hover:bg-gray-100 rounded-lg" aria-label="検索">
-          <SearchIcon className="h-5 w-5" />
-        </button>
-      </div>
-      {/* Desktop: filters + search + user */}
-      <div className="hidden md:flex items-center gap-4 px-6 py-4">
-        <div className="relative">
-          <select className="rounded-lg border border-gray-200 bg-white pl-3 pr-10 py-2 text-sm text-gray-700">
-            <option>チェック実施月</option>
-          </select>
-          <span className="pointer-events-none absolute right-2 top-1/2 flex h-5 w-5 -translate-y-1/2 items-center justify-center rounded-full bg-primary text-xs font-bold text-white">
-            11
-          </span>
+    <header className="sticky top-0 z-10 border-b border-[#dcdcde] bg-white">
+      {/* Mobile: logo + 店舗ボタン + hamburger */}
+      <MobileTopBar storeCount={MOBILE_STORE_COUNT} />
+      {/* Mobile: フィルター一行・横スクロール（切れる分は横スクロール） */}
+      <div className="overflow-x-auto border-t border-[#dcdcde] md:hidden">
+        <div className="flex items-center gap-2 px-4 py-3 flex-nowrap min-w-0">
+          <button type="button" className="inline-flex items-center gap-1 shrink-0 rounded-full border border-[#dcdcde] bg-white px-3 py-2 text-sm font-bold text-gray-900">
+            チェック実施月
+            <ChevronDownIcon className="h-5 w-5 shrink-0" />
+          </button>
+          <button type="button" className="inline-flex items-center gap-1 shrink-0 rounded-full border border-[#dcdcde] bg-white px-3 py-2 text-sm font-bold text-gray-900">
+            店舗
+            <ChevronDownIcon className="h-5 w-5 shrink-0" />
+          </button>
+          <button type="button" className="inline-flex items-center gap-1 shrink-0 rounded-full border border-[#dcdcde] bg-white px-3 py-2 text-sm font-bold text-gray-900">
+            ステータス
+            <ChevronDownIcon className="h-5 w-5 shrink-0" />
+          </button>
+          <button type="button" className="inline-flex items-center gap-1 shrink-0 rounded-full border border-[#dcdcde] bg-white px-3 py-2 text-sm font-bold text-gray-900">
+            レポート
+            <ChevronDownIcon className="h-5 w-5 shrink-0" />
+          </button>
+          <button type="button" className="inline-flex items-center gap-1 shrink-0 rounded-full border border-[#dcdcde] bg-white px-3 py-2 text-sm font-bold text-gray-900">
+            <FilterXIcon className="h-5 w-5 shrink-0" />
+            リセット
+          </button>
+          <button type="button" className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-[#dcdcde] bg-white text-[#5c5c5f]" aria-label="キーワード検索">
+            <SearchIcon className="h-5 w-5" />
+          </button>
         </div>
-        <select className="rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-gray-700">
-          <option>店舗</option>
-        </select>
-        <select className="rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-gray-700">
-          <option>ステータス</option>
-        </select>
-        <select className="rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-gray-700">
-          <option>レポート</option>
-        </select>
-        <button type="button" className="rounded-lg border border-gray-200 px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50">
-          リセット
-        </button>
-        <div className="flex-1 relative max-w-xs">
-          <SearchIcon className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
-          <input
-            type="search"
-            placeholder="キーワード検索"
-            value={keyword}
-            onChange={(e) => setKeyword(e.target.value)}
-            className="w-full rounded-lg border border-gray-200 py-2 pl-9 pr-3 text-sm text-gray-900 placeholder-gray-400"
-          />
+      </div>
+      {/* Desktop: Figma 11078-98681 - フィルター + 検索 */}
+      <div className="hidden md:flex flex-col gap-2 px-6 py-4">
+        <div className="flex items-center justify-between gap-4 w-full">
+          <div className="flex flex-wrap items-center gap-4">
+            <button type="button" className="inline-flex items-center gap-1 rounded-full border border-[#dcdcde] bg-white px-3 py-2 text-sm font-bold text-gray-900 hover:bg-gray-50">
+              チェック実施月
+              <ChevronDownIcon className="h-5 w-5 shrink-0" />
+            </button>
+            <button type="button" className="inline-flex items-center gap-1 rounded-full border border-[#dcdcde] bg-white px-3 py-2 text-sm font-bold text-gray-900 hover:bg-gray-50">
+              店舗
+              <ChevronDownIcon className="h-5 w-5 shrink-0" />
+            </button>
+            <button type="button" className="inline-flex items-center gap-1 rounded-full border border-[#dcdcde] bg-white px-3 py-2 text-sm font-bold text-gray-900 hover:bg-gray-50">
+              ステータス
+              <ChevronDownIcon className="h-5 w-5 shrink-0" />
+            </button>
+            <button type="button" className="inline-flex items-center gap-1 rounded-full border border-[#dcdcde] bg-white px-3 py-2 text-sm font-bold text-gray-900 hover:bg-gray-50">
+              レポート
+              <ChevronDownIcon className="h-5 w-5 shrink-0" />
+            </button>
+            <button type="button" className="inline-flex items-center gap-1 rounded-full border border-[#dcdcde] bg-white px-3 py-2 text-sm font-bold text-gray-900 hover:bg-gray-50">
+              <FilterXIcon className="h-5 w-5 shrink-0" />
+              リセット
+            </button>
+          </div>
+          <div className="flex h-10 w-full max-w-[400px] items-center gap-2 rounded-md border border-[#dcdcde] bg-white px-3 py-2">
+            <SearchIcon className="h-5 w-5 shrink-0 text-[#99999b]" />
+            <input
+              type="search"
+              placeholder="キーワード検索"
+              value={keyword}
+              onChange={(e) => setKeyword(e.target.value)}
+              className="flex-1 min-w-0 text-sm text-gray-900 placeholder:text-[#99999b] bg-transparent border-0 outline-none"
+            />
+          </div>
         </div>
-        <button type="button" className="p-2 text-gray-600 hover:bg-gray-100 rounded-lg" aria-label="ヘルプ">
-          <HelpIcon className="h-5 w-5" />
-        </button>
-        <button type="button" className="relative p-2 text-gray-600 hover:bg-gray-100 rounded-lg" aria-label="通知">
-          <BellIcon className="h-5 w-5" />
-          <span className="absolute right-0 top-0 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-white">
-            1
-          </span>
-        </button>
-        <div className="h-8 w-8 rounded-full bg-gray-300" aria-hidden />
       </div>
     </header>
   )
